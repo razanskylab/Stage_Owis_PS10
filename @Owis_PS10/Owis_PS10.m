@@ -11,11 +11,14 @@ classdef Owis_PS10 < handle
 
 	properties
 
-		isConnected(1, 1) logical = 0;
 		isHomed(1, 1) logical = 0;
 		isEnabled(1, 1) logical = 0;
 
 		COM_PORT(1, 1) int32 = 14;
+	end
+
+	properties(SetAccess = private)
+		isConnected(1, 1) logical = 0;
 	end
 
 	properties (Constant)
@@ -73,17 +76,7 @@ classdef Owis_PS10 < handle
 		Init(ow); % initialize stage
 		Read_Error(ow, varargin); % can be overloaded with existing error code
 		Home(ow); % move stage to lower reference point and declare as 0
-		Move(ow, pos);
-
-		function set.isConnected(op, isConnected)
-			if isConnected ~= op.isConnected
-				if isConnected
-					op.Connect();
-				else
-					op.Disconnect();
-				end
-			end
-		end
+		Move(ow, pos);		
 
 		function targetMode = get.targetMode(op)
 			targetMode = calllib('ps10', 'PS10_GetTargetMode', 1, 1);
