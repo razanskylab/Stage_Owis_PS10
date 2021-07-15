@@ -9,8 +9,8 @@ function Home(op)
 
 	fprintf('[Owis_PS10] Homing stage... ');
 	op.refSwitch = 2;
-	op.velRF = -20000;
-	op.velRS = 2000;
+	op.velRF = -20000 / 10000;
+	op.velRS = 2000 / 10000;
 	ret = calllib('ps10', 'PS10_GoRef', 1, 1, 6);
 	op.Read_Error(ret);
 	op.isHomed = 1;

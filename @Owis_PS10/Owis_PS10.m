@@ -6,6 +6,7 @@
 % TODO:
 %		*  Autmoatically find correct COM Port
 % 	*  Implement wait move function
+% 	*  make get functions for isHomed and isEnabled from controller
 
 classdef Owis_PS10 < handle
 
@@ -15,6 +16,7 @@ classdef Owis_PS10 < handle
 		isEnabled(1, 1) logical = 0;
 
 		COM_PORT(1, 1) int32 = 14;
+		beSilent(1, 1) logical = 0;
 	end
 
 	properties(SetAccess = private)
@@ -45,8 +47,8 @@ classdef Owis_PS10 < handle
 		mm_to_inc(1, 1) single;
 		maxPos(1, 1) single;
 		refSwitch(1, 1) int32;
-		velRF(1, 1) int32; % fast velocity for a reference drive [Hz]
-		velRS(1, 1) int32; % slow velocity for a reference drive [Hz]
+		velRF(1, 1) single; % fast velocity for a reference drive [Hz]
+		velRS(1, 1) single; % slow velocity for a reference drive [Hz]
 		targetMode(1, 1) int32; % 0: relative positioning, 1: absolute posit
 	end
 
@@ -63,6 +65,7 @@ classdef Owis_PS10 < handle
 
 			% open connection to stage
 			Owis_PS10.Connect();
+			Owis_PS10.Init();
 		end
 
 		% class desctructor
@@ -142,11 +145,11 @@ classdef Owis_PS10 < handle
 		end
 
 		function inc_to_mm = get.inc_to_mm(op)
-			inc_to_mm = op.pitch / op.stepsPerRev / op.gRatio;
+			inc_to_mm = single(op.pitch) / single(op.stepsPerRev) / single(op.gRatio);
 		end
 
 		function mm_to_inc = get.mm_to_inc(op)
-			mm_to_inc = op.stepsPerRev * op.gRatio / op.pitch; 
+			mm_to_inc = single(op.stepsPerRev) * single(op.gRatio) / single(op.pitch); 
 		end
 
 		function pos = get.pos(op)
