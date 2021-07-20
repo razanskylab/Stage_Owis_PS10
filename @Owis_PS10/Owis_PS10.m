@@ -11,7 +11,6 @@
 classdef Owis_PS10 < handle
 
 	properties
-
 		isHomed(1, 1) logical = 0;
 		isEnabled(1, 1) logical = 0;
 
@@ -51,7 +50,7 @@ classdef Owis_PS10 < handle
 		velRS(1, 1) single; % slow velocity for a reference drive [Hz]
 		targetMode(1, 1) int32; % 0: relative positioning, 1: absolute posit
 	end
-
+	
 	methods
 
 		% class constructor
@@ -154,7 +153,7 @@ classdef Owis_PS10 < handle
 
 		function pos = get.pos(op)
 			pos = calllib('ps10', 'PS10_GetPosition', 1, 1);
-			pos - pos * op.inc_to_mm;
+			pos = pos * op.inc_to_mm;
 			err = calllib('ps10', 'PS10_GetReadError', 1);
 		end
 
