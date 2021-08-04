@@ -5,7 +5,6 @@
 
 % TODO:
 %		*  Autmoatically find correct COM Port
-% 	*  Implement wait move function
 % 	*  make get functions for isHomed and isEnabled from controller
 
 classdef Owis_PS10 < handle
@@ -78,7 +77,8 @@ classdef Owis_PS10 < handle
 		Init(ow); % initialize stage
 		Read_Error(ow, varargin); % can be overloaded with existing error code
 		Home(ow); % move stage to lower reference point and declare as 0
-		Move(ow, pos);		
+		Move(ow, pos);
+		Wait_Move(ow);
 
 		function targetMode = get.targetMode(op)
 			targetMode = calllib('ps10', 'PS10_GetTargetMode', 1, 1);
@@ -159,9 +159,8 @@ classdef Owis_PS10 < handle
 
 		function set.pos(op, pos)
 			pos = pos * op.mm_to_inc;
-			op.Move(pos);
-			% ret = calllib('ps10', 'PS10_SetPosition', 1, 1, pos)
-			% op.Read_Error(ret);
+			op.Move(pos); % does not wait for the movement to finish
+			op.Wait_Move(); % makes sure that we finish moving before returning to MATLAB
 		end
 
 		function acc = get.acc(op)
