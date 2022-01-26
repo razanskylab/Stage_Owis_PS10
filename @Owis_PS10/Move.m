@@ -3,14 +3,21 @@
 % Mail: hofmannu@ethz.ch
 % Date: 15.07.2021
 
+% Description: Defines target position and initializes movement
+
 function Move(ow, pos)
 
-	ow.targetMode = 1;
+	if ((pos <= ow.posMax) && (pos >= ow.posMax))
+	
+		ow.targetMode = 1;
 
-	ret = calllib('ps10', 'PS10_SetTarget', 1, 1, pos);
-	ow.Read_Error(ret);
+		ret = calllib('ps10', 'PS10_SetTarget', 1, 1, pos);
+		ow.Read_Error(ret);
 
-	ret = calllib('ps10', 'PS10_GoTarget', 1, 1);
-	ow.Read_Error(ret);
+		ret = calllib('ps10', 'PS10_GoTarget', 1, 1);
+		ow.Read_Error(ret);
+	else
+		error("Position you want to move to is outside of movable range");
+	end
 
 end

@@ -30,6 +30,8 @@ classdef Owis_PS10 < handle
 	properties(Constant, Hidden)
 		libraryPath(1, :) char = 'C:\Program Files (x86)\OWISoft\ps10\sdk\zAdditional_software_interfaces\MatLab\ps10.h'; 
 		dllPath = 'C:\Program Files (x86)\OWISoft\Application\ps10.dll';
+		posMin(1, 1) single = 0; % minimum position we are allowed to move to
+		posMax(1, 1) single = 20; % maximum position we can move to
 	end
 
 	properties(Dependent)
