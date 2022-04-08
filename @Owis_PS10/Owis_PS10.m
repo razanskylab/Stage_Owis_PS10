@@ -31,13 +31,13 @@ classdef Owis_PS10 < handle
 		libraryPath(1, :) char = 'C:\Program Files (x86)\OWISoft\ps10\sdk\zAdditional_software_interfaces\MatLab\ps10.h'; 
 		dllPath = 'C:\Program Files (x86)\OWISoft\Application\ps10.dll';
 		posMin(1, 1) single = 0; % minimum position we are allowed to move to
-		posMax(1, 1) single = 20; % maximum position we can move to
 	end
 
 	properties(Dependent)
-		pos(1, 1) single;
-		vel(1, 1) single;
-		acc(1, 1) single;
+		posMax(1, 1) single; % maximum position we can move to
+		pos(1, 1) single; % position of the stage [mm]
+		vel(1, 1) single; % velocity of the stage [mm/s]
+		acc(1, 1) single; % acceleration of the stage [mm/s^2]
 		motorType(1, :) char;
 		timeout(1, 1) single; % 0 means no timeout, otherwise in [ms]
 		microstepMode(1, 1) single;
@@ -155,14 +155,18 @@ classdef Owis_PS10 < handle
 
 		function pos = get.pos(op)
 			pos = calllib('ps10', 'PS10_GetPosition', 1, 1);
-			pos = pos * op.inc_to_mm;
+			pos = single(pos * op.inc_to_mm);
 			err = calllib('ps10', 'PS10_GetReadError', 1);
 		end
 
 		function set.pos(op, pos)
-			pos = pos * op.mm_to_inc;
-			op.Move(pos); % does not wait for the movement to finish
-			op.Wait_Move(); % makes sure that we finish moving before returning to MATLAB
+			if ((pos <= op.posMax) && (pos >= op.posMin))
+				pos = pos * op.mm_to_inc;
+				op.Move(pos); % does not wait for the movement to finish
+				op.Wait_Move(); % makes sure that we finish moving before returning to MATLAB
+			else
+				error("Outside of movable range");
+			end
 		end
 
 		function acc = get.acc(op)
@@ -229,6 +233,11 @@ classdef Owis_PS10 < handle
 			ret = calllib('ps10', 'PS10_SetAxisMonitor', 1, 1, to);
 			op.Read_Error(ret);
 			fprintf('done!\n');
+		end
+
+		function posMax = get.posMax(op)
+			inIncrements = calllib('ps10', 'PS10_GetPosRange', 1, 1);
+			posMax = single(inIncrements) * op.inc_to_mm;
 		end
 
 	end

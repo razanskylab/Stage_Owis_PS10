@@ -7,8 +7,7 @@
 
 function Move(ow, pos)
 
-	if ((pos <= ow.posMax) && (pos >= ow.posMax))
-	
+		
 		ow.targetMode = 1;
 
 		ret = calllib('ps10', 'PS10_SetTarget', 1, 1, pos);
@@ -16,8 +15,6 @@ function Move(ow, pos)
 
 		ret = calllib('ps10', 'PS10_GoTarget', 1, 1);
 		ow.Read_Error(ret);
-	else
-		error("Position you want to move to is outside of movable range");
-	end
+	
 
 end

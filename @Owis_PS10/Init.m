@@ -1,6 +1,6 @@
 function Init(op)
 
-	fprintf('[Owis_PS10] Initializing stage');
+	fprintf('[Owis_PS10] Initializing stage... ');
 
 	ret = calllib('ps10', 'PS10_MotorInit', 1, 1);
 

@@ -13,7 +13,11 @@ function Home(op)
 	op.velRS = 2000 / 10000;
 	ret = calllib('ps10', 'PS10_GoRef', 1, 1, 6);
 	op.Read_Error(ret);
+
+	op.Wait_Move();
+	
 	op.isHomed = 1;
+
 	fprintf('done!\n');
 	% Mode=0 nächsten Index-Impuls suchen und stehenbleiben 
 	% Mode=1 Referenzschalter anfahren und stehenbleiben 
