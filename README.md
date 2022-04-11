@@ -9,3 +9,5 @@ Before using, please
 *  adapt the COM port
 
 Those properties cannot be read from the stage. Other then this I hope that the code is self-explaining and straight forward to use. Please let me know if you would need another feature implemented.
+
+Try update from home PC
